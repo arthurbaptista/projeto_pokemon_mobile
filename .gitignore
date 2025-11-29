@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ambientes Virtuais (CRUCIAL: Não enviar para o Git)
+venv/
+.venv/
+env/
+.env
+
+# IDEs (Configurações locais do seu editor)
+.idea/
+.vscode/
+*.swp
+
+# Sistema Operacional
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
