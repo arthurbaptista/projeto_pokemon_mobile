@@ -3,9 +3,6 @@ import sys
 import django
 from pathlib import Path
 
-# --- CONFIGURAÇÃO DE CAMINHOS (ESSENCIAL) ---
-# O arquivo está em: projeto/BO/scripts_dados/popular_banco.py
-# Precisamos subir 3 níveis para chegar na raiz do projeto
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 sys.path.append(str(BASE_DIR))
 
