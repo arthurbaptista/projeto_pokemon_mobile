@@ -50,13 +50,16 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
+        // Observa o resultado do Login
         viewModel.loginResult.observe(this) { result ->
-            if (result.success && result.token != null) {
-                saveUserSession(result.token, binding.editTextUsername.text.toString().trim())
+            if (result.token != null) {
+                RetrofitClient.authToken = result.token
+
+                saveUserSession(result.token, result.usuario ?: "")
                 startActivity(Intent(this, DashboardActivity::class.java))
                 finish()
             } else {
-                Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(this, result.erro ?: "Falha no login", Toast.LENGTH_LONG).show()
             }
         }
 

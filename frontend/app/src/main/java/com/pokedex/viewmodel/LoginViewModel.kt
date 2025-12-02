@@ -15,9 +15,6 @@ class LoginViewModel(private val repository: PokemonRepository) : ViewModel() {
     private val _loginResult = MutableLiveData<LoginResponse>()
     val loginResult: LiveData<LoginResponse> = _loginResult
 
-    private val _registerResult = MutableLiveData<LoginResponse>()
-    val registerResult: LiveData<LoginResponse> = _registerResult
-
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
@@ -26,13 +23,13 @@ class LoginViewModel(private val repository: PokemonRepository) : ViewModel() {
             _isLoading.value = true
             try {
                 val response = repository.login(request)
-                _loginResult.value = response.body()
+                if (response.isSuccessful && response.body() != null) {
+                    _loginResult.value = response.body()
+                } else {
+                    _loginResult.value = LoginResponse(null, null, null, "Erro: Login inválido")
+                }
             } catch (e: Exception) {
-                _loginResult.value = LoginResponse(
-                    success = false,
-                    message = "Erro de conexão: ${e.message}",
-                    token = null
-                )
+                _loginResult.value = LoginResponse(null, null, null, "Erro: ${e.message}")
             } finally {
                 _isLoading.value = false
             }
@@ -40,21 +37,19 @@ class LoginViewModel(private val repository: PokemonRepository) : ViewModel() {
     }
 
     fun register(request: UserRegistrationRequest) {
+
         viewModelScope.launch {
             _isLoading.value = true
             try {
                 val response = repository.registerUser(request)
-                _registerResult.value = response.body()
+                // Reutilizando LoginResponse para simplificar
+                if(response.isSuccessful) _loginResult.value = response.body()
+                else _loginResult.value = LoginResponse(null,null,null, "Erro ao cadastrar")
             } catch (e: Exception) {
-                _registerResult.value = LoginResponse(
-                    success = false,
-                    message = "Erro de conexão: ${e.message}",
-                    token = null
-                )
+                _loginResult.value = LoginResponse(null,null,null, e.message)
             } finally {
                 _isLoading.value = false
             }
         }
     }
 }
-
