@@ -14,7 +14,7 @@ class PokemonBO:
                          .annotate(qtd=Count('tipo'))
                          .order_by('-qtd')[:3])
 
-        top_habs = list(Habilidade.objects.filter(status=True, pokemon__ativo=True)
+        top_habs = list(Habilidade.objects.filter(status=True, pokemon__status=True)
                         .values('nome')
                         .annotate(qtd=Count('pokemon'))
                         .order_by('-qtd')[:3])
@@ -51,7 +51,7 @@ class PokemonBO:
         habs_nomes = dados_json.get('habilidades', [])
         usuario_login = dados_json.get('usuario_login')
 
-        if Pokemon.objects.filter(nome=nome, ativo=True).exists():
+        if Pokemon.objects.filter(nome=nome, status=True).exists():
             raise ValueError('Erro: Pokémon já existe.')
 
         if len(habs_nomes) < 1 or len(habs_nomes) > 3:
@@ -63,7 +63,7 @@ class PokemonBO:
             raise ValueError('Usuário não encontrado.')
 
         novo_pokemon = Pokemon.objects.create(
-            nome=nome, tipo=tipo, criado_por=usuario, ativo=True
+            nome=nome, tipo=tipo, criado_por=usuario, status=True
         )
 
         for h_nome in habs_nomes:
@@ -74,7 +74,7 @@ class PokemonBO:
 
     def obter_pokemon(self, pk):
         try:
-            p = Pokemon.objects.get(pk=pk, ativo=True)
+            p = Pokemon.objects.get(pk=pk, status=True)
             return {
                 'id': p.id, 'nome': p.nome, 'tipo': p.tipo,
                 'habilidades': [h.nome for h in p.habilidades.all()],
@@ -85,14 +85,14 @@ class PokemonBO:
 
     def atualizar_pokemon(self, pk, dados_json):
         try:
-            pokemon = Pokemon.objects.get(pk=pk, ativo=True)
+            pokemon = Pokemon.objects.get(pk=pk, status=True)
         except Pokemon.DoesNotExist:
             raise ObjectDoesNotExist('Pokémon não encontrado')
 
         if 'nome' in dados_json:
             # Valida duplicidade na edição
             novo_nome = dados_json['nome']
-            if Pokemon.objects.filter(nome=novo_nome, ativo=True).exclude(pk=pk).exists():
+            if Pokemon.objects.filter(nome=novo_nome, status=True).exclude(pk=pk).exists():
                 raise ValueError('Nome já utilizado por outro Pokémon.')
             pokemon.nome = novo_nome
 
@@ -113,7 +113,7 @@ class PokemonBO:
 
     def excluir_pokemon(self, pk):
         try:
-            pokemon = Pokemon.objects.get(pk=pk, ativo=True)
+            pokemon = Pokemon.objects.get(pk=pk, status=True)
             pokemon.status = False
             pokemon.save()
             return {'mensagem': 'Excluído com sucesso'}
