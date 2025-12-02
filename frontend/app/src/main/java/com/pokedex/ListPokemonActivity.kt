@@ -24,6 +24,11 @@ class ListPokemonActivity : AppCompatActivity() {
         binding = ActivityListPokemonBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // seta de voltar
+        binding.topAppBar.setNavigationOnClickListener {
+            finish()
+        }
+
         val repository = PokemonRepository(RetrofitClient.instance)
         val factory = ViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory).get(PokemonViewModel::class.java)
@@ -52,7 +57,7 @@ class ListPokemonActivity : AppCompatActivity() {
             if (result.success && result.data != null) {
                 pokemonAdapter.submitList(result.data)
             } else {
-                // Tratar erro
+                // Tratar erro se quiser
             }
         }
 

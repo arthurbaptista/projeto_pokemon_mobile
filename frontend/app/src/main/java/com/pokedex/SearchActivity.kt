@@ -26,7 +26,18 @@ class SearchActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         searchMode = intent.getStringExtra("SEARCH_MODE") ?: "TYPE"
-        title = if (searchMode == "TYPE") getString(R.string.search_type_title) else getString(R.string.search_ability_title)
+
+        // seta de voltar
+        binding.topAppBar.setNavigationOnClickListener {
+            finish()
+        }
+
+        // título dinâmico na toolbar
+        binding.topAppBar.title = if (searchMode == "TYPE") {
+            getString(R.string.search_type_title)
+        } else {
+            getString(R.string.search_ability_title)
+        }
 
         val repository = PokemonRepository(RetrofitClient.instance)
         val factory = ViewModelFactory(repository)
@@ -64,7 +75,7 @@ class SearchActivity : AppCompatActivity() {
             if (result.success && result.data != null) {
                 pokemonAdapter.submitList(result.data)
             } else {
-                // Tratar erro
+                // Tratar erro se quiser
             }
         }
 
