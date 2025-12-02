@@ -35,7 +35,7 @@ class CreatePokemonActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        finish() // Fecha essa tela e volta para a anterior
+        finish()
         return true
     }
 
@@ -43,19 +43,54 @@ class CreatePokemonActivity : AppCompatActivity() {
         binding.buttonCreate.setOnClickListener {
             val name = binding.editTextPokemonName.text.toString().trim()
             val type = binding.editTextPokemonType.text.toString().trim()
-            val abilities = binding.editTextPokemonAbilities.text
-                .toString()
+            val abilitiesText = binding.editTextPokemonAbilities.text.toString().trim()
+            val abilities = abilitiesText
                 .split(",")
                 .map { it.trim() }
                 .filter { it.isNotEmpty() }
 
             val userLogin = getUserLogin()
 
-            if (name.isNotEmpty() && type.isNotEmpty() && abilities.isNotEmpty() && userLogin != null) {
-                val request = PokemonRequest(name, type, abilities, userLogin)
-                viewModel.createPokemon(request)
-            } else {
-                Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
+            // Comprehensive validation
+            when {
+                name.isEmpty() && type.isEmpty() && abilitiesText.isEmpty() -> {
+                    binding.inputPokemonName.error = "Campo obrigatório"
+                    binding.inputPokemonType.error = "Campo obrigatório"
+                    binding.inputPokemonAbilities.error = "Campo obrigatório"
+                    Toast.makeText(this, "⚠️ Preencha todos os campos", Toast.LENGTH_SHORT).show()
+                }
+                name.isEmpty() -> {
+                    binding.inputPokemonName.error = "Campo obrigatório"
+                    Toast.makeText(this, "⚠️ Digite o nome do Pokémon", Toast.LENGTH_SHORT).show()
+                }
+                name.length < 2 -> {
+                    binding.inputPokemonName.error = "Nome muito curto"
+                    Toast.makeText(this, "⚠️ Nome deve ter pelo menos 2 caracteres", Toast.LENGTH_SHORT).show()
+                }
+                type.isEmpty() -> {
+                    binding.inputPokemonType.error = "Campo obrigatório"
+                    Toast.makeText(this, "⚠️ Digite o tipo do Pokémon", Toast.LENGTH_SHORT).show()
+                }
+                abilitiesText.isEmpty() -> {
+                    binding.inputPokemonAbilities.error = "Campo obrigatório"
+                    Toast.makeText(this, "⚠️ Digite pelo menos uma habilidade", Toast.LENGTH_SHORT).show()
+                }
+                abilities.isEmpty() -> {
+                    binding.inputPokemonAbilities.error = "Formato inválido"
+                    Toast.makeText(this, "⚠️ Digite habilidades válidas separadas por vírgula", Toast.LENGTH_SHORT).show()
+                }
+                userLogin == null -> {
+                    Toast.makeText(this, "❌ Erro: Usuário não identificado", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    // Clear all errors
+                    binding.inputPokemonName.error = null
+                    binding.inputPokemonType.error = null
+                    binding.inputPokemonAbilities.error = null
+                    
+                    val request = PokemonRequest(name, type, abilities, userLogin)
+                    viewModel.createPokemon(request)
+                }
             }
         }
     }
@@ -63,15 +98,16 @@ class CreatePokemonActivity : AppCompatActivity() {
     private fun observeViewModel() {
         viewModel.operationResult.observe(this) { result ->
             if (result.success) {
-                Toast.makeText(this, getString(R.string.create_success_message), Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "✅ ${getString(R.string.create_success_message)}", Toast.LENGTH_LONG).show()
                 finish()
             } else {
-                Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "❌ ${result.message}", Toast.LENGTH_LONG).show()
             }
         }
 
         viewModel.isLoading.observe(this) { isLoading ->
             binding.progressBar.visibility = if (isLoading) android.view.View.VISIBLE else android.view.View.GONE
+            binding.buttonCreate.isEnabled = !isLoading
         }
     }
 

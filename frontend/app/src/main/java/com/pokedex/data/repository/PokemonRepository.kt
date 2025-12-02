@@ -14,4 +14,5 @@ class PokemonRepository(private val apiService: ApiService) {
     suspend fun getPokemonDetails(id: Int) = apiService.getPokemonDetails(id)
     suspend fun updatePokemon(id: Int, request: PokemonUpdateRequest) = apiService.updatePokemon(id, request)
     suspend fun deletePokemon(id: Int) = apiService.deletePokemon(id)
+
 }

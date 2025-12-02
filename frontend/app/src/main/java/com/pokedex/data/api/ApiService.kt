@@ -35,4 +35,5 @@ interface ApiService {
 
     @DELETE("pokemons/{id}/")
     suspend fun deletePokemon(@Path("id") id: Int): Response<Map<String, String>>
+
 }

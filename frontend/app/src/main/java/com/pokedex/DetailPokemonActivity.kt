@@ -29,6 +29,7 @@ class DetailPokemonActivity : AppCompatActivity() {
 
         pokemonId = intent.getIntExtra("POKEMON_ID", -1)
         if (pokemonId == -1) {
+            Toast.makeText(this, "❌ Erro: ID do Pokémon inválido", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -52,17 +53,49 @@ class DetailPokemonActivity : AppCompatActivity() {
         binding.buttonUpdate.setOnClickListener {
             val name = binding.editTextPokemonName.text.toString().trim()
             val type = binding.editTextPokemonType.text.toString().trim()
-            val abilities = binding.editTextPokemonAbilities.text
-                .toString()
+            val abilitiesText = binding.editTextPokemonAbilities.text.toString().trim()
+            val abilities = abilitiesText
                 .split(",")
                 .map { it.trim() }
                 .filter { it.isNotEmpty() }
 
-            if (name.isNotEmpty() && type.isNotEmpty() && abilities.isNotEmpty()) {
-                val request = PokemonUpdateRequest(name, type, abilities)
-                viewModel.updatePokemon(pokemonId, request)
-            } else {
-                Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
+            // Comprehensive validation
+            when {
+                name.isEmpty() && type.isEmpty() && abilitiesText.isEmpty() -> {
+                    binding.inputPokemonName.error = "Campo obrigatório"
+                    binding.inputPokemonType.error = "Campo obrigatório"
+                    binding.inputPokemonAbilities.error = "Campo obrigatório"
+                    Toast.makeText(this, "⚠️ Preencha todos os campos", Toast.LENGTH_SHORT).show()
+                }
+                name.isEmpty() -> {
+                    binding.inputPokemonName.error = "Campo obrigatório"
+                    Toast.makeText(this, "⚠️ Digite o nome do Pokémon", Toast.LENGTH_SHORT).show()
+                }
+                name.length < 2 -> {
+                    binding.inputPokemonName.error = "Nome muito curto"
+                    Toast.makeText(this, "⚠️ Nome deve ter pelo menos 2 caracteres", Toast.LENGTH_SHORT).show()
+                }
+                type.isEmpty() -> {
+                    binding.inputPokemonType.error = "Campo obrigatório"
+                    Toast.makeText(this, "⚠️ Digite o tipo do Pokémon", Toast.LENGTH_SHORT).show()
+                }
+                abilitiesText.isEmpty() -> {
+                    binding.inputPokemonAbilities.error = "Campo obrigatório"
+                    Toast.makeText(this, "⚠️ Digite pelo menos uma habilidade", Toast.LENGTH_SHORT).show()
+                }
+                abilities.isEmpty() -> {
+                    binding.inputPokemonAbilities.error = "Formato inválido"
+                    Toast.makeText(this, "⚠️ Digite habilidades válidas separadas por vírgula", Toast.LENGTH_SHORT).show()
+                }
+                else -> {
+                    // Clear all errors
+                    binding.inputPokemonName.error = null
+                    binding.inputPokemonType.error = null
+                    binding.inputPokemonAbilities.error = null
+                    
+                    val request = PokemonUpdateRequest(name, type, abilities)
+                    viewModel.updatePokemon(pokemonId, request)
+                }
             }
         }
 
@@ -79,21 +112,28 @@ class DetailPokemonActivity : AppCompatActivity() {
                 binding.editTextPokemonType.setText(pokemon.tipo)
                 binding.editTextPokemonAbilities.setText(pokemon.habilidades.joinToString(", "))
             } else {
-                Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "❌ ${result.message}", Toast.LENGTH_LONG).show()
             }
         }
 
         viewModel.operationResult.observe(this) { result ->
             if (result.success) {
-                Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
+                val message = when {
+                    result.message.contains("atualizado", ignoreCase = true) -> "✅ ${getString(R.string.update_success_message)}"
+                    result.message.contains("excluído", ignoreCase = true) -> "✅ ${getString(R.string.delete_success_message)}"
+                    else -> "✅ ${result.message}"
+                }
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show()
                 finish()
             } else {
-                Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "❌ ${result.message}", Toast.LENGTH_LONG).show()
             }
         }
 
         viewModel.isLoading.observe(this) { isLoading ->
             binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.buttonUpdate.isEnabled = !isLoading
+            binding.buttonDelete.isEnabled = !isLoading
         }
     }
 

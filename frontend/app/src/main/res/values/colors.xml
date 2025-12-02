@@ -1,14 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <color name="purple_500">#C00000</color>
-    <color name="purple_700">#8A0000</color>
+    <!-- Pokémon Main Colors -->
+    <color name="pokemon_red">#DC0A2D</color>
+    <color name="pokemon_red_dark">#A4081F</color>
+    <color name="pokemon_yellow">#FFCB05</color>
+    <color name="pokemon_blue">#3B4CCA</color>
+    <color name="pokemon_blue_light">#5B6FE8</color>
+    
+    <!-- Primary Theme Colors -->
+    <color name="purple_500">#DC0A2D</color>
+    <color name="purple_700">#A4081F</color>
     <color name="purple_200">#FFCDD2</color>
-    <color name="teal_200">#FFC107</color>
-    <color name="teal_700">#FFA000</color>
+    <color name="teal_200">#FFCB05</color>
+    <color name="teal_700">#E6B600</color>
+    
+    <!-- Background Colors -->
+    <color name="colorBackground">#F5F5F5</color>
+    <color name="colorBackgroundCard">#FFFFFF</color>
+    <color name="colorBackgroundGradientStart">#DC0A2D</color>
+    <color name="colorBackgroundGradientEnd">#A4081F</color>
+    
+    <!-- Text Colors -->
+    <color name="textPrimary">#1D1D1D</color>
+    <color name="textSecondary">#666666</color>
+    <color name="textWhite">#FFFFFF</color>
+    
+    <!-- Basic Colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="colorBackground">#FFFFFF</color>
-    <color name="textPrimary">#212121</color>
-    <color name="textSecondary">#757575</color>
+    
+    <!-- Type Colors -->
+    <color name="type_normal">#A8A878</color>
+    <color name="type_fire">#F08030</color>
+    <color name="type_water">#6890F0</color>
+    <color name="type_electric">#F8D030</color>
+    <color name="type_grass">#78C850</color>
+    <color name="type_ice">#98D8D8</color>
+    <color name="type_fighting">#C03028</color>
+    <color name="type_poison">#A040A0</color>
+    <color name="type_ground">#E0C068</color>
+    <color name="type_flying">#A890F0</color>
+    <color name="type_psychic">#F85888</color>
+    <color name="type_bug">#A8B820</color>
+    <color name="type_rock">#B8A038</color>
+    <color name="type_ghost">#705898</color>
+    <color name="type_dragon">#7038F8</color>
+    <color name="type_dark">#705848</color>
+    <color name="type_steel">#B8B8D0</color>
+    <color name="type_fairy">#EE99AC</color>
+    
+    <!-- Status Colors -->
+    <color name="success">#4CAF50</color>
+    <color name="error">#F44336</color>
+    <color name="warning">#FF9800</color>
 </resources>
