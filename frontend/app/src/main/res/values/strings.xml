@@ -1,3 +1,50 @@
 <resources>
-    <string name="app_name">PokedexApp</string>
+    <string name="app_name">Pokédex</string>
+
+    <!-- Login & Register -->
+    <string name="login_username_hint">Usuário</string>
+    <string name="login_password_hint">Senha</string>
+    <string name="login_button">Entrar</string>
+    <string name="register_button">Cadastrar</string>
+    <string name="login_error_title">Falha no Login</string>
+    <string name="login_invalid_credentials">Credenciais inválidas.</string>
+    <string name="login_connectivity_error">Erro de conexão.</string>
+    <string name="registration_success">Usuário cadastrado com sucesso!</string>
+    <string name="registration_fail">Falha ao cadastrar usuário.</string>
+
+    <!-- Dashboard -->
+    <string name="dashboard_title">Dashboard</string>
+    <string name="dashboard_pokemon_count">Total de Pokémon: %d</string>
+    <string name="dashboard_top_types">Top 3 Tipos: %s</string>
+    <string name="dashboard_top_abilities">Top 3 Habilidades: %s</string>
+    <string name="create_pokemon_button_text">Criar Pokémon</string>
+    <string name="list_all_pokemon_button_text">Listar Todos</string>
+
+    <!-- Menu -->
+    <string name="menu_search_by_type">Buscar por Tipo</string>
+    <string name="menu_search_by_ability">Buscar por Habilidade</string>
+    <string name="menu_logout">Sair</string>
+
+    <!-- Create/Edit Pokemon -->
+    <string name="pokemon_name_hint">Nome</string>
+    <string name="pokemon_type_hint">Tipo</string>
+    <string name="pokemon_abilities_hint">Habilidades (separadas por vírgula)</string>
+    <string name="create_button">Criar</string>
+    <string name="update_button">Atualizar</string>
+    <string name="delete_button">Excluir</string>
+    <string name="create_success_message">Pokémon criado com sucesso!</string>
+    <string name="update_success_message">Pokémon atualizado com sucesso!</string>
+    <string name="delete_success_message">Pokémon excluído com sucesso!</string>
+    <string name="operation_error_title">Erro na Operação</string>
+    <string name="delete_confirm_title">Confirmar Exclusão</string>
+    <string name="delete_confirm_message">Tem certeza que deseja excluir este Pokémon?</string>
+    <string name="dialog_yes">Sim</string>
+    <string name="dialog_no">Não</string>
+
+    <!-- Search -->
+    <string name="search_hint">Digite para buscar...</string>
+    <string name="search_button_text">Buscar</string>
+    <string name="search_type_title">Buscar por Tipo</string>
+    <string name="search_ability_title">Buscar por Habilidade</string>
+
 </resources>
