@@ -24,13 +24,25 @@ class ListPokemonActivity : AppCompatActivity() {
         binding = ActivityListPokemonBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Lista de Pokémons"
+
         val repository = PokemonRepository(RetrofitClient.instance)
         val factory = ViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory).get(PokemonViewModel::class.java)
 
         setupRecyclerView()
+        setupListeners()
         observeViewModel()
+    }
 
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.listPokemons()
     }
 
@@ -47,12 +59,16 @@ class ListPokemonActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupListeners() {
+        binding.fabAddPokemon.setOnClickListener {
+            startActivity(Intent(this, CreatePokemonActivity::class.java))
+        }
+    }
+
     private fun observeViewModel() {
         viewModel.pokemonList.observe(this) { result ->
             if (result.success && result.data != null) {
                 pokemonAdapter.submitList(result.data)
-            } else {
-                // Tratar erro
             }
         }
 

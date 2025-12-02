@@ -2,7 +2,6 @@ package com.pokedex
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +24,8 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         searchMode = intent.getStringExtra("SEARCH_MODE") ?: "TYPE"
         title = if (searchMode == "TYPE") getString(R.string.search_type_title) else getString(R.string.search_ability_title)
 
@@ -37,8 +38,13 @@ class SearchActivity : AppCompatActivity() {
         observeViewModel()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
+
     private fun setupRecyclerView() {
-        pokemonAdapter = PokemonAdapter { pokemon ->
+        pokemonAdapter = PokemonAdapter(showType = false) { pokemon ->
             val intent = Intent(this, DetailPokemonActivity::class.java).apply {
                 putExtra("POKEMON_ID", pokemon.id)
             }
@@ -60,16 +66,16 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.searchResult.observe(this) { result ->
-            if (result.success && result.data != null) {
-                pokemonAdapter.submitList(result.data)
+        viewModel.searchResult.observe(this) { listaPokemons ->
+            if (!listaPokemons.isNullOrEmpty()) {
+                pokemonAdapter.submitList(listaPokemons)
             } else {
-                // Tratar erro
+                pokemonAdapter.submitList(emptyList())
             }
         }
 
         viewModel.isLoading.observe(this) { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.progressBar.visibility = if (isLoading) android.view.View.VISIBLE else android.view.View.GONE
         }
     }
 }

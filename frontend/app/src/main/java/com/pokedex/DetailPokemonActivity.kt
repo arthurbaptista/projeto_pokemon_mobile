@@ -24,6 +24,9 @@ class DetailPokemonActivity : AppCompatActivity() {
         binding = ActivityDetailPokemonBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Detalhes do Pokémon"
+
         pokemonId = intent.getIntExtra("POKEMON_ID", -1)
         if (pokemonId == -1) {
             finish()
@@ -38,6 +41,11 @@ class DetailPokemonActivity : AppCompatActivity() {
         observeViewModel()
 
         viewModel.getPokemonDetails(pokemonId)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
     }
 
     private fun setupListeners() {

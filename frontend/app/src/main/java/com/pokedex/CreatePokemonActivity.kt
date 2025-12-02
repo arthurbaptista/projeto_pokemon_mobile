@@ -2,7 +2,6 @@ package com.pokedex
 
 import android.content.Context
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -23,12 +22,21 @@ class CreatePokemonActivity : AppCompatActivity() {
         binding = ActivityCreatePokemonBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Cadastrar Pokémon"
+
+
         val repository = PokemonRepository(RetrofitClient.instance)
         val factory = ViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory).get(PokemonViewModel::class.java)
 
         setupListeners()
         observeViewModel()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish() // Fecha essa tela e volta para a anterior
+        return true
     }
 
     private fun setupListeners() {
@@ -63,7 +71,7 @@ class CreatePokemonActivity : AppCompatActivity() {
         }
 
         viewModel.isLoading.observe(this) { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.progressBar.visibility = if (isLoading) android.view.View.VISIBLE else android.view.View.GONE
         }
     }
 

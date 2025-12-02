@@ -1,19 +1,17 @@
-
 package com.pokedex.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pokedex.data.model.ApiResponse
 import com.pokedex.data.model.Pokemon
 import com.pokedex.data.repository.PokemonRepository
 import kotlinx.coroutines.launch
 
 class SearchViewModel(private val repository: PokemonRepository) : ViewModel() {
 
-    private val _searchResult = MutableLiveData<ApiResponse<List<Pokemon>>>()
-    val searchResult: LiveData<ApiResponse<List<Pokemon>>> = _searchResult
+    private val _searchResult = MutableLiveData<List<Pokemon>?>()
+    val searchResult: LiveData<List<Pokemon>?> = _searchResult
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -27,9 +25,14 @@ class SearchViewModel(private val repository: PokemonRepository) : ViewModel() {
                     "ABILITY" -> repository.searchByAbility(query)
                     else -> null
                 }
-                _searchResult.value = response?.body()
+
+                if (response != null && response.isSuccessful) {
+                    _searchResult.value = response.body()
+                } else {
+                    _searchResult.value = emptyList()
+                }
             } catch (e: Exception) {
-                _searchResult.value = ApiResponse(false, "Erro de conexão: ${e.message}", null)
+                _searchResult.value = emptyList()
             } finally {
                 _isLoading.value = false
             }

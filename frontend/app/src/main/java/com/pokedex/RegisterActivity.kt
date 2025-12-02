@@ -1,7 +1,6 @@
 package com.pokedex
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -44,17 +43,20 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.registerResult.observe(this) { result ->
-            if (result.success) {
+
+        viewModel.loginResult.observe(this) { result ->
+
+            if (result.token != null || result.id != null) {
                 Toast.makeText(this, getString(R.string.registration_success), Toast.LENGTH_LONG).show()
-                finish()
+                finish() // Fecha a tela e volta para o Login
             } else {
-                Toast.makeText(this, result.message, Toast.LENGTH_LONG).show()
+                val msg = result.erro ?: getString(R.string.registration_fail)
+                Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
             }
         }
 
         viewModel.isLoading.observe(this) { isLoading ->
-            binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+            binding.progressBar.visibility = if (isLoading) android.view.View.VISIBLE else android.view.View.GONE
         }
     }
 }

@@ -25,22 +25,48 @@ class DashboardActivity : AppCompatActivity() {
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+        val sharedPref = getSharedPreferences("PokedexPrefs", Context.MODE_PRIVATE)
+        val token = sharedPref.getString("USER_TOKEN", null)
+        if (token != null) {
+            RetrofitClient.authToken = token
+        }
+
         val repository = PokemonRepository(RetrofitClient.instance)
         val factory = ViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory).get(DashboardViewModel::class.java)
 
         setupListeners()
         observeViewModel()
+    }
 
+    override fun onResume() {
+        super.onResume()
         viewModel.fetchDashboardData()
     }
 
     private fun setupListeners() {
-        binding.buttonCreatePokemon.setOnClickListener { 
+        binding.buttonCreatePokemon.setOnClickListener {
             startActivity(Intent(this, CreatePokemonActivity::class.java))
         }
-        binding.buttonListAll.setOnClickListener { 
+        binding.buttonListAll.setOnClickListener {
             startActivity(Intent(this, ListPokemonActivity::class.java))
+        }
+
+        binding.buttonSearchByType.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            intent.putExtra("SEARCH_MODE", "TYPE")
+            startActivity(intent)
+        }
+
+        binding.buttonSearchByAbility.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            intent.putExtra("SEARCH_MODE", "ABILITY")
+            startActivity(intent)
+        }
+
+        binding.buttonLogout.setOnClickListener {
+            logout()
         }
     }
 
@@ -58,9 +84,6 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         viewModel.error.observe(this) { error ->
-            error?.let {
-                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
-            }
         }
     }
 
