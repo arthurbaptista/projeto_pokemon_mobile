@@ -24,6 +24,11 @@ class DetailPokemonActivity : AppCompatActivity() {
         binding = ActivityDetailPokemonBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // seta de voltar
+        binding.topAppBar.setNavigationOnClickListener {
+            finish()
+        }
+
         pokemonId = intent.getIntExtra("POKEMON_ID", -1)
         if (pokemonId == -1) {
             finish()

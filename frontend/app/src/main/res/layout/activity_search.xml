@@ -6,14 +6,27 @@
     android:layout_height="match_parent"
     android:padding="24dp">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/purple_500"
+        app:title="@string/search_button_text"
+        app:titleTextColor="@color/white"
+        app:navigationIcon="@android:drawable/ic_media_previous"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputSearch"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/search_hint"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topAppBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/buttonSearch"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="12dp">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -55,4 +68,3 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
-

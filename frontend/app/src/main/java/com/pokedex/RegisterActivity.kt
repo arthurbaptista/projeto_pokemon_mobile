@@ -22,6 +22,11 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Seta de voltar
+        binding.topAppBar.setNavigationOnClickListener {
+            finish()
+        }
+
         val repository = PokemonRepository(RetrofitClient.instance)
         val factory = ViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory).get(LoginViewModel::class.java)

@@ -23,6 +23,11 @@ class CreatePokemonActivity : AppCompatActivity() {
         binding = ActivityCreatePokemonBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Seta de voltar na toolbar própria da tela
+        binding.topAppBar.setNavigationOnClickListener {
+            finish()
+        }
+
         val repository = PokemonRepository(RetrofitClient.instance)
         val factory = ViewModelFactory(repository)
         viewModel = ViewModelProvider(this, factory).get(PokemonViewModel::class.java)
